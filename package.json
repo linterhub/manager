@@ -20,7 +20,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "test": "npm run build & ./node_modules/mocha/bin/mocha --recursive",
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
@@ -29,7 +30,9 @@
     "ts-node": "^7.0.0",
     "typings": "^2.1.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.0.1",
+    "mocha": "^5.2.0",
+    "chai": "^4.1.2"
   },
   "dependencies": {
     "package-json": "^5.0.0",
