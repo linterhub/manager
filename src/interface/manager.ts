@@ -7,9 +7,31 @@ import { Meta } from './meta';
 export abstract class Manager {
 
     protected name: string;
+    private cached: { [key: string]: any };
 
     constructor(name: string) {
         this.name = name;
+        this.cached = {};
+    }
+
+    private requestCache(key: string, value?: any) : any
+    {
+        if (!value) {
+            return this.cached[key];
+        }
+        this.cached[key] = value;
+    }
+
+    protected async cache(
+        request: (name: string, version?: string) => Promise<any>, 
+        name: string, 
+        version?: string ) : Promise<any> 
+        {
+        const key = `${name}:${version}`;
+        if(!this.requestCache(key)) {
+            this.requestCache(key, await request(name, version));
+        }
+        return this.requestCache(key);
     }
 
     /**
