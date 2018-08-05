@@ -9,8 +9,11 @@ export enum managerType {
 }
 
 
-export function getManager(type: managerType): Manager {
-    const managerName: string = managerType[type];
+export function getManager(manager: managerType | String): Manager {
+    const managerName: string =
+        manager instanceof (String) ?
+            manager.toString() :
+            managerType[manager];
     const managerClass = require(`./managers/${managerName}`);
     return new managerClass.default(managerName);
 }
