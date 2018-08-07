@@ -12,7 +12,7 @@ export default class extends Manager {
     }
 
     protected async requestGEM(name: string, version?: string): Promise<any> {
-        return JSON.parse(await requestPromise(this.generateUrl('gems', name)));
+        return JSON.parse(await this.cache(requestPromise(this.generateUrl('gems', name)), `${name}:gems`));
     }
 
     constructor(name: string, host: string) {
@@ -21,9 +21,8 @@ export default class extends Manager {
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
-        const json = await this.cache(this.requestGEM, name, version);
+        const json = await this.requestGEM(name, version);
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage_uri,
@@ -33,7 +32,7 @@ export default class extends Manager {
     }
 
     async getDeps(name: string, version?: string): Promise<Dependency[]> {
-        const json = await this.cache(this.requestGEM, name, version);
+        const json = await this.requestGEM(name, version);
         const dependencies: Dependency[] = [];
 
         for (const key in json.dependencies.runtime) {
@@ -50,7 +49,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const data = await this.cache(requestPromise(this.generateUrl), 'versions', name);
+        const data = await this.cache(requestPromise(this.generateUrl('versions', name)), `${name}:versions`);
         return JSON.parse(data);
     }
 }

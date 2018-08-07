@@ -1,37 +1,17 @@
 import { Dependency } from './deps';
 import { Meta } from './meta';
+import { Cacheable } from './cacheable';
 
 /**
  * This abstract class describes methods of package manager object
  */
-export abstract class Manager {
+export abstract class Manager extends Cacheable {
 
     protected name: string;
-    private cached: { [key: string]: any };
 
     constructor(name: string) {
+        super();
         this.name = name;
-        this.cached = {};
-    }
-
-    private requestCache(key: string, value?: any) : any
-    {
-        if (!value) {
-            return this.cached[key];
-        }
-        this.cached[key] = value;
-    }
-
-    protected async cache(
-        request: (name: string, version?: string) => Promise<any>, 
-        name: string, 
-        version?: string ) : Promise<any> 
-        {
-        const key = `${name}:${version}`;
-        if(!this.requestCache(key)) {
-            this.requestCache(key, await request(name, version));
-        }
-        return this.requestCache(key);
     }
 
     /**

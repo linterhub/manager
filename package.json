@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "test": "npm run build & ./node_modules/mocha/bin/mocha --recursive",
+    "test": "npm run build & ./node_modules/mocha/bin/mocha --recursive"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",

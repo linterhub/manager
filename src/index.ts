@@ -5,15 +5,18 @@ export enum managerType {
     pip = "pip",
     gem = "gem",
     composer = "composer"
-
 }
 
 
-export function getManager(manager: managerType | String): Manager {
-    const managerName: string =
+export function getManager(manager: managerType | String): Manager | undefined {
+    const managerName: string | undefined =
         manager instanceof (String) ?
-            manager.toString() :
+            ((Object as any).values(managerType).includes(manager.toString()) ? manager.toString() : undefined) :
             managerType[manager];
-    const managerClass = require(`./managers/${managerName}`);
-    return new managerClass.default(managerName);
+    if (managerName){
+        const managerClass = require(`./managers/${managerName}`);
+        return new managerClass.default(managerName);
+    } else {
+        return undefined;
+    }
 }

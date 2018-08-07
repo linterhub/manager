@@ -12,7 +12,7 @@ export default class extends Manager {
             name += `/${version}`;
         }
         const packageUrl = `https://${this.host}/${name}/json`;
-        return JSON.parse(await requestPromise(packageUrl));
+        return JSON.parse(await this.cache(requestPromise(packageUrl), `${name}`));
     }
 
     constructor(name: string, host: string) {
@@ -21,9 +21,8 @@ export default class extends Manager {
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
-        const json = await this.cache(this.requestPIP, name, version);
+        const json = await this.requestPIP(name, version);
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.info.summary,
             url: json.info.home_page,
@@ -33,7 +32,7 @@ export default class extends Manager {
     }
 
     async getDeps(name: string, version?: string): Promise<Dependency[]> {
-        const json = await this.cache(this.requestPIP, name, version);
+        const json = await this.requestPIP(name, version);
         const dependencies: Dependency[] = [];
 
         if (json.info.requires_dist) {
@@ -61,7 +60,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const json = await this.cache(this.requestPIP, name);
+        const json = await this.requestPIP(name);
         return Object
             .keys(json.releases)
             .filter(x => x && json.releases[x].length > 0);

@@ -7,17 +7,19 @@ export default class extends Manager {
 
     // TODO: Create filters to parse only necessary data
     private async requestNPM(name: string, version?: string): Promise<any> {
-        return await packageJson(name, { version: version ? version : 'latest', fullMetadata: true, allVersions: true });
+        return await 
+            this.cache(
+                packageJson(name, { version: version ? version : 'latest', fullMetadata: true, allVersions: true }),
+            `${name}:${version}` );
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
-        let json = await this.cache(this.requestNPM, name, version);
+        let json = await this.requestNPM(name, version);
         version = version ? version : Object.keys(json.versions).pop();
         if (version) {
             json = json.versions[version];
         }
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage,
@@ -27,7 +29,7 @@ export default class extends Manager {
     }
 
     async getDeps(name: string, version?: string): Promise<Dependency[]> {
-        const json = await this.cache(this.requestNPM, name, version);
+        const json = await this.requestNPM(name, version);
         const dependencies: Dependency[] = [];
 
         for (const key in json.dependencies) {
@@ -44,7 +46,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const json = await this.cache(this.requestNPM, name);
+        const json = await this.requestNPM(name);
         return Object.keys(json.versions);
     }
 }

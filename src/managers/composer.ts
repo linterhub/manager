@@ -9,7 +9,7 @@ export default class extends Manager {
 
     protected async requestComposer(name: string, version?: string): Promise<any> {
         const packageUrl = `https://${this.host}/packages/${name}.json`;
-        return JSON.parse(await requestPromise(packageUrl));
+        return JSON.parse(await this.cache(requestPromise(packageUrl), `${name}`));
     }
 
     constructor(name: string, host: string) {
@@ -18,7 +18,7 @@ export default class extends Manager {
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
-        const x = await this.cache(this.requestComposer, name, version);
+        const x = await this.requestComposer(name, version);
         const json =
             version ?
                 x.package.versions[version] :
@@ -28,7 +28,6 @@ export default class extends Manager {
                     .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
                     .shift();
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage,
@@ -38,7 +37,7 @@ export default class extends Manager {
     }
 
     async getDeps(name: string, version?: string): Promise<Dependency[]> {
-        const json = await this.cache(this.requestComposer, name, version);
+        const json = await this.requestComposer(name, version);
         const dependencies: Dependency[] =
             Object.keys(json.require)
                 .map(x => {
@@ -53,7 +52,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const json = await this.cache(this.requestComposer, name);
+        const json = await this.requestComposer(name);
         return Object.keys(json.package.versions)
             .filter(x => x.includes('.'));
     }
