@@ -12,8 +12,7 @@ export default class extends Manager {
     }
 
     protected async requestGEM(name: string, version?: string): Promise<any> {
-        const data = await requestPromise(this.generateUrl('gems', name));
-        return JSON.parse(data);
+        return JSON.parse(await this.cache(requestPromise(this.generateUrl('gems', name)), `${name}:gems`));
     }
 
     constructor(name: string, host: string) {
@@ -24,7 +23,6 @@ export default class extends Manager {
     async getMeta(name: string, version?: string): Promise<Meta> {
         const json = await this.requestGEM(name, version);
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage_uri,
@@ -51,7 +49,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const data = await requestPromise(this.generateUrl('versions', 'name'));
+        const data = await this.cache(requestPromise(this.generateUrl('versions', name)), `${name}:versions`);
         return JSON.parse(data);
     }
 }

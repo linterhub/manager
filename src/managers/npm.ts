@@ -6,8 +6,11 @@ import packageJson from 'package-json';
 export default class extends Manager {
 
     // TODO: Create filters to parse only necessary data
-    private requestNPM(name: string, version?: string): Promise<any> {
-        return packageJson(name, { version: version ? version : 'latest', fullMetadata: true, allVersions: true });
+    private async requestNPM(name: string, version?: string): Promise<any> {
+        return await 
+            this.cache(
+                packageJson(name, { version: version ? version : 'latest', fullMetadata: true, allVersions: true }),
+            `${name}:${version}` );
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
@@ -17,7 +20,6 @@ export default class extends Manager {
             json = json.versions[version];
         }
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage,
@@ -44,7 +46,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const json = await this.requestNPM(name,);
+        const json = await this.requestNPM(name);
         return Object.keys(json.versions);
     }
 }

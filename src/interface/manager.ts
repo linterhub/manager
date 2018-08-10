@@ -1,14 +1,16 @@
 import { Dependency } from './deps';
 import { Meta } from './meta';
+import { Cacheable } from './cacheable';
 
 /**
  * This abstract class describes methods of package manager object
  */
-export abstract class Manager {
+export abstract class Manager extends Cacheable {
 
     protected name: string;
 
     constructor(name: string) {
+        super();
         this.name = name;
     }
 

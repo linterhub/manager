@@ -9,7 +9,7 @@ export default class extends Manager {
 
     protected async requestComposer(name: string, version?: string): Promise<any> {
         const packageUrl = `https://${this.host}/packages/${name}.json`;
-        return JSON.parse(await requestPromise(packageUrl));
+        return JSON.parse(await this.cache(requestPromise(packageUrl), `${name}`));
     }
 
     constructor(name: string, host: string) {
@@ -28,7 +28,6 @@ export default class extends Manager {
                     .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
                     .shift();
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage,
