@@ -17,18 +17,18 @@ export default class extends Manager {
 
     constructor(name: string, host: string) {
         super(name);
-        this.host = host;
+        this.host = host ? host : this.host;
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
         const json = await this.requestPIP(name, version);
         return {
-            package: `${json.name}:${json.version}`,
-            name: json.name,
+            package: `${json.info.name}:${json.info.version}`,
+            name: json.info.name,
             description: json.info.summary,
             url: json.info.home_page,
-            license: json.info.license,
-            version: json.version,
+            license: json.info.license ? json.info.license : null,
+            version: json.info.version,
         };
     }
 

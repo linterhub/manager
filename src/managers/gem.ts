@@ -18,7 +18,7 @@ export default class extends Manager {
 
     constructor(name: string, host: string) {
         super(name);
-        this.host = host;
+        this.host = host ? host : this.host;
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
@@ -26,7 +26,7 @@ export default class extends Manager {
         return {
             package: `${json.name}:${json.version}`,
             name: json.name,
-            description: json.description,
+            description: json.info,
             url: json.homepage_uri,
             license: json.licenses ? json.licenses[0] : null,
             version: json.version,

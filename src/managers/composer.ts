@@ -14,7 +14,7 @@ export default class extends Manager {
 
     constructor(name: string, host: string) {
         super(name);
-        this.host = host;
+        this.host = host ? host : this.host;
     }
 
     async getMeta(name: string, version?: string): Promise<Meta> {
@@ -24,8 +24,8 @@ export default class extends Manager {
                 x.package.versions[version] :
                 Object.keys(x.package.versions)
                     .filter(y => y.includes('.'))
-                    .map(y => x.package.versions[x])
-                    .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+                    .map(y => x.package.versions[y])
+                    .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
                     .shift();
         return {
             package: `${json.name}:${json.version}`,
