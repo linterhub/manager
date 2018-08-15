@@ -24,7 +24,6 @@ export default class extends Manager {
     async getMeta(name: string, version?: string): Promise<Meta> {
         const json = await this.requestGEM(name, version);
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.info,
             url: json.homepage_uri,
@@ -52,6 +51,8 @@ export default class extends Manager {
 
     async getVersions(name: string): Promise<string[]> {
         const data = await requestPromise(this.generateUrl('versions', 'name'));
-        return JSON.parse(data);
+        return JSON.parse(data).map((version : any) => {
+            return version.number;
+        });
     }
 }

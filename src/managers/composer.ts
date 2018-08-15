@@ -28,7 +28,6 @@ export default class extends Manager {
                     .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
                     .shift();
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage,

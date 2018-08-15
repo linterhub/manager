@@ -23,7 +23,7 @@
     "mocha": "./node_modules/mocha/bin/mocha",
     "build": "tsc -p .",
     "lint": "tslint -c tslint.json  --project . -t codeFrame",
-    "test": "mocha -r ts-node/register test/**/test.ts"
+    "test": "mocha -r ts-node/register test/test.**.ts"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",

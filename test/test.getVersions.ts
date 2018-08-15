@@ -1,28 +1,19 @@
 import data from './data';
 import mocha from 'mocha';
-import Library from '../interface/library';
+import Library from './interface/library';
 import { expect, assert } from 'chai';
-import { getManager } from './../../src/index';
+import { getManager } from './../src/index';
 
 const test = (liba : Library) => {
     describe(liba.manager, () => {
         const manager = getManager(liba.manager);
-        it(`should return meta of ${liba.name} v${liba.version}`, (done) => {
-            manager.getMeta(liba.name, (liba.version as string))
+        it(`should return versions array of ${liba.name}`, (done) => {
+            manager.getVersions(liba.name)
                 .then((result) => {
-                    expect(result.version).to.equal(liba.version);
-                    expect(result.name).to.equal(liba.name);
+                    assert.include(result, liba.version);
                     done();
                 })
                 .catch(done);
-        });
-
-        it(`should return meta without version of ${liba.name}`, (done) =>{
-            manager.getMeta(liba.name)
-            .then((result) => {
-                expect(result.name).to.equal(liba.name);
-                done();
-            }).catch(done);
         });
 
         it(`should test rejections for inccorect name: ${liba.name}_test`, (done) => {
@@ -38,7 +29,7 @@ const test = (liba : Library) => {
     });
 };
 
-describe('getMeta()', () => {
+describe('getVersion()', () => {
     data.map((liba) => {
         test(liba);
     });

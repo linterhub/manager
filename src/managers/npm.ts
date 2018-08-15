@@ -17,7 +17,6 @@ export default class extends Manager {
             json = json.versions[version];
         }
         return {
-            package: `${json.name}:${json.version}`,
             name: json.name,
             description: json.description,
             url: json.homepage,

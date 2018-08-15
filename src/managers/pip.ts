@@ -23,7 +23,6 @@ export default class extends Manager {
     async getMeta(name: string, version?: string): Promise<Meta> {
         const json = await this.requestPIP(name, version);
         return {
-            package: `${json.info.name}:${json.info.version}`,
             name: json.info.name,
             description: json.info.summary,
             url: json.info.home_page,

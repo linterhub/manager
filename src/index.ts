@@ -5,7 +5,6 @@ export enum managerType {
     pip = "pip",
     gem = "gem",
     composer = "composer"
-
 }
 
 
