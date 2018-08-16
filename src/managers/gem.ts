@@ -7,12 +7,18 @@ export default class extends Manager {
 
     protected host = 'rubygems.org';
 
-    protected generateUrl(method: string, gem: string){
+    protected generateUrlApiV1(method: string, gem: string){
         return `https://${this.host}/api/v1/${method}/${gem}.json`;
     }
 
+    protected generateUrlApiV2(method: string, gem: string, version: string) {
+        return `https://${this.host}/api/v2/${method}/${gem}/versions/${version}.json`;
+    }
+
     protected async requestGEM(name: string, version?: string): Promise<any> {
-        const data = await requestPromise(this.generateUrl('gems', name));
+        const data = await requestPromise(
+            version ? this.generateUrlApiV2('rubygems', name, (version as string)) :
+                this.generateUrlApiV1('gems', name));
         return JSON.parse(data);
     }
 
@@ -35,7 +41,7 @@ export default class extends Manager {
     async getDeps(name: string, version?: string): Promise<Dependency[]> {
         const json = await this.requestGEM(name, version);
         const dependencies: Dependency[] = [];
-
+ 
         for (const key in json.dependencies.runtime) {
             if (json.dependencies.runtime.hasOwnProperty(key)) {
                 dependencies.push({
@@ -50,7 +56,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const data = await requestPromise(this.generateUrl('versions', 'name'));
+        const data = await requestPromise(this.generateUrlApiV1('versions', name));
         return JSON.parse(data).map((version : any) => {
             return version.number;
         });
