@@ -1,9 +1,9 @@
 import { managerType } from './../../src/index';
+import Dependency from '../../src/interface/deps';
 
-interface Library {
+export default interface Library {
     name: string;
-    version?: string | string[];
     manager: managerType;
+    version?: string;
+    dependency?: Dependency;
 }
-
-export default Library;

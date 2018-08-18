@@ -7,20 +7,19 @@ import { getManager } from './../src/index';
 const test = (liba : Library) => {
     describe(liba.manager, () => {
         const manager = getManager(liba.manager);
-        it(`should return meta of ${liba.name} v${liba.version}`, (done) => {
-            manager.getMeta(liba.name, liba.version)
+        it(`should return deps of ${liba.name} v${liba.version}`, (done) => {
+            manager.getDeps(liba.name, liba.version)
                 .then((result) => {
-                    expect(result.version).to.equal(liba.version);
-                    expect(result.name).to.equal(liba.name);
+                    assert.deepInclude(result, liba.dependency);
                     done();
                 })
                 .catch(done);
         });
 
-        it(`should return meta with last of version for ${liba.name}`, (done) =>{
-            manager.getMeta(liba.name)
+        it(`should return deps with last of version for ${liba.name}`, (done) =>{
+            manager.getDeps(liba.name)
             .then((result) => {
-                expect(result.name).to.equal(liba.name);
+                assert.isNotEmpty(result);
                 done();
             }).catch(done);
         });
@@ -38,7 +37,7 @@ const test = (liba : Library) => {
     });
 };
 
-describe('getMeta()', () => {
+describe('getDeps()', () => {
     data.map((liba) => {
         test(liba);
     });
