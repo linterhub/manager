@@ -1,7 +1,7 @@
-import { Manager } from '../interface/manager';
-import { Dependency } from '../interface/deps';
-import { Meta } from '../interface/meta';
-const requestPromise = require('request-promise');
+import Dependency from '../interface/deps';
+import Manager from '../interface/manager';
+import Request from 'request-promise';
+import Meta from '../interface/meta';
 
 export default class extends Manager {
 
@@ -12,7 +12,7 @@ export default class extends Manager {
             name += `/${version}`;
         }
         const packageUrl = `https://${this.host}/${name}/json`;
-        return JSON.parse(await requestPromise(packageUrl));
+        return JSON.parse(await Request(packageUrl));
     }
 
     constructor(name: string, host: string) {
@@ -55,7 +55,6 @@ export default class extends Manager {
                 }
             }
         }
-
         return dependencies;
     }
 

@@ -1,7 +1,7 @@
-import { Manager } from '../interface/manager';
-import { Dependency } from '../interface/deps';
-import { Meta } from '../interface/meta';
-const requestPromise = require('request-promise');
+import Dependency from '../interface/deps';
+import Manager from '../interface/manager';
+import Request from 'request-promise';
+import Meta from '../interface/meta';
 
 export default class extends Manager {
 
@@ -16,7 +16,7 @@ export default class extends Manager {
     }
 
     protected async requestGEM(name: string, version?: string): Promise<any> {
-        const data = await requestPromise(
+        const data = await Request(
             version ? this.generateUrlApiV2('rubygems', name, (version as string)) :
                 this.generateUrlApiV1('gems', name));
         return JSON.parse(data);
@@ -41,7 +41,7 @@ export default class extends Manager {
     async getDeps(name: string, version?: string): Promise<Dependency[]> {
         const json = await this.requestGEM(name, version);
         const dependencies: Dependency[] = [];
- 
+
         for (const key in json.dependencies.runtime) {
             if (json.dependencies.runtime.hasOwnProperty(key)) {
                 dependencies.push({
@@ -56,7 +56,7 @@ export default class extends Manager {
     }
 
     async getVersions(name: string): Promise<string[]> {
-        const data = await requestPromise(this.generateUrlApiV1('versions', name));
+        const data = await Request(this.generateUrlApiV1('versions', name));
         return JSON.parse(data).map((version : any) => {
             return version.number;
         });

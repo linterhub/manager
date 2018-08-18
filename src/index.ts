@@ -1,4 +1,4 @@
-import { Manager } from './interface/manager';
+import Manager from './interface/manager';
 
 export enum managerType {
     npm = "npm",
@@ -6,7 +6,6 @@ export enum managerType {
     gem = "gem",
     composer = "composer"
 }
-
 
 export function getManager(type: managerType): Manager {
     const managerName: string = managerType[type];
