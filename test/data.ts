@@ -40,6 +40,15 @@ const data : Library[] = [
             package: "ruby_parser", 
             version: '~> 3.0' 
         }
+    },
+    {
+        name: "System.Linq",
+        version: "4.1.0",
+        manager: managerType.nuget,
+        dependency: {
+            manager: managerType.nuget,
+            package: ".NETStandard1.6"
+        }
     }
 ];
 

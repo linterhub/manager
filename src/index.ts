@@ -5,7 +5,8 @@ export enum managerType {
     npm = "npm",
     pip = "pip",
     gem = "gem",
-    composer = "composer"
+    composer = "composer",
+    nuget = "nuget"
 }
 
 /**
