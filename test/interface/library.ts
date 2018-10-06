@@ -1,9 +1,7 @@
-import { managerType } from './../../src/index';
-import Dependency from '../../src/interface/deps';
+import { Dependency, Meta } from '../../src/index';
+import { RegistryType } from '../../src/model/registry.type';
 
-export default interface Library {
-    name: string;
-    manager: managerType;
-    version?: string;
+export type Linter = Meta & {
+    registry: RegistryType
     dependency?: Dependency;
 }

@@ -1,13 +1,16 @@
-import Library from './interface/library';
-import { managerType } from './../src/index';
+import { Linter } from './interface/library';
+import { RegistryType } from '../src/model/registry.type';
 
-const data : Library[] = [
+const data : Linter[] = [
     {
-        name: "eslint",
-        version: "5.2.0",
-        manager: managerType.npm,
+        name: 'eslint',
+        version: '5.2.0',
+        registry: RegistryType.npm,
         dependency: {
-            manager: managerType.npm, 
+            source: {
+                registry: RegistryType.npm,
+                repository: 'registry.npmjs.org'
+            },
             package: 'glob', 
             version: '^7.1.2'
         },
@@ -15,30 +18,51 @@ const data : Library[] = [
     {
         name: 'flake8',
         version: '3.4.0',
-        manager: managerType.pip,
+        registry: RegistryType.pip,
         dependency: {
-            manager: managerType.pip, 
-            package: "pyflakes"
+            source: {
+                registry: RegistryType.pip,
+                repository: 'pypi.org/pypi'
+            },
+            package: 'pyflakes'
         },
     },
     {
         name: 'squizlabs/php_codesniffer',
         version: '3.3.0',
-        manager: managerType.composer,
+        registry: RegistryType.composer,
         dependency: { 
-            manager: managerType.composer, 
-            package: "php", 
+            source: {
+                registry: RegistryType.composer,
+                repository: 'packagist.org'
+            },
+            package: 'php', 
             version: '>=5.4.0' 
         }
     },
     {
         name: 'flay',
         version: '2.2.0',
-        manager: managerType.gem,
+        registry: RegistryType.gem,
         dependency:  { 
-            manager: managerType.gem, 
-            package: "ruby_parser", 
+            source: {
+                registry: RegistryType.gem,
+                repository: 'rubygems.org'
+            },
+            package: 'ruby_parser', 
             version: '~> 3.0' 
+        }
+    },
+    {
+        name: 'System.Linq',
+        version: '4.1.0',
+        registry: RegistryType.nuget,
+        dependency: {
+            source: {
+                registry: RegistryType.nuget,
+                repository: 'api.nuget.org/v3'
+            },
+            package: '.NETStandard1.6'
         }
     }
 ];
